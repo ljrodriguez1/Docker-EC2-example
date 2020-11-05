@@ -38,18 +38,17 @@ after_succes:
 
 deploy:
   - provider: s3
-    access_key_id: AKIAR53FFWDJEFQXH3XT
-    secret_access_key: &1
-      secure: fTlLSu3DHw08Y3jMPPAynaz3G2nX1/r/ArPEAdKsN4+LU0eILYFY3PF8AIV4TFF9uGhI6hXS2Z4VyfcqYi1LFoFnTiqgDNOesGwxekoaGAbjtmn6JFj92hnkasfPCUGBsu/CcWUl5U+EQXit3B4h+jVIuPWdj9dcifAt5Zukt0FLBkXsR8jBCI34CyUsppwYm9EwLSynL63f4DJ2EBwmWd123wBhOSzMH6mega9nF0Tlw14etJNxQu3pyREY+ER+1OXB8AgdcXAUTK910VrJ0a6nVmZiXB8sJdHpdpGMEoEWLKZOinE2NeUBiOn4NSl6UtizVWNQ24G+ujnvuFkfzJWQHuhC57opgcycwR1fkP/83b/e+lE/gJgoN7wJibnvNIHqPrEcYY0PqEwIOKV00KanIJCL10gCG4pib0d3+hQ94C6X1+TtSjcnSWrazGpctqq/bUf7x4S6KSJGVMC5oe6Jn41cY7xmHQ0Ygwq6LTrVMXrHsGFKzfKfZs3T4gwpkxyzSn6pjLixvxwFMIo49l1zNehvjkha/ni2n/X/YcOyMRkliak2ke7/lTmwjeOPOTTLeobb2h/LrZG+d9ck871/etFeq2ej0/RQysUaZ0Tat+Sn87UB+CYSwzh9UIawdIPAX+igw2wT2xx7G0n9N4CHgB5HJaLtHVeMAfyBD5I=
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_ACCESS_SECRET_KEY
     local_dir: dpl_cd_upload
     skip_cleanup: true
     on: &2
-      repo: iic2173/iic2173-proyecto-semestral-grupo4
+      repo: ljrodriguez1/Docker-EC2-example
     bucket: travis-bucket-arquichat
     upload_dir: latest
   - provider: codedeploy
-    access_key_id: AKIAR53FFWDJEFQXH3XT
-    secret_access_key: *1
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_ACCESS_SECRET_KEY
     bucket: travis-bucket-arquichat
     key: latest/latest.zip
     bundle_type: zip
