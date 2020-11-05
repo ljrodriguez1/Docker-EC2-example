@@ -1,0 +1,26 @@
+version: 0.0
+os: linux
+
+files:
+  - source: /
+    destination: /home/ubuntu/iic2173-proyecto-semestral-grupo4
+
+permissions:
+  - object: /
+    pattern: "**"
+    owner: root
+
+hooks: 
+  ApplicationStop:
+    - location: Scripts/stop.sh
+      timeout: 600
+      runas: root
+  AfterInstall:
+    - location: Scripts/install.sh
+      timeout: 600
+      runas: root
+  ApplicationStart:
+    - location: Scripts/start.sh
+      timeout: 600
+      runas: root
+    

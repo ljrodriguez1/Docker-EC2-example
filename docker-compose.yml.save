@@ -1,0 +1,68 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: backend
+    volumes:
+      - .:/home/node/app
+      - node_modules_b:/home/node/app/node_modules
+    ports:
+      - "3030:5000"
+    networks:
+      - app-network
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    volumes:
+      - .:/home/node/app
+      - node_modules_f:/home/node/app/node_modules
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+  webserver:
+    image: nginx:mainline-alpine
+    container_name: webserver
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - web-root:/var/www/html
+      - ./nginx-conf:/etc/nginx/conf.d
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+    depends_on:
+      - frontend
+    networks:
+      - app-network
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    depends_on:
+      - webserver
+    command: certonly --webroot --webroot-path=/var/www/html --email aerrazuriz4@uc.cl --agree-tos --no-eff-email --staging -d e0local.tk  -d www.e0local.tk
+
+volumes:
+  certbot-etc:
+  certbot-var:
+  node_modules_b:
+  node_modules_f:
+  web-root:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/ubuntu/iic2173-e0-aerrazuriz4/frontend/public
+      o: bind
+
+networks:
+  app-network:
+    driver: bridge
+
