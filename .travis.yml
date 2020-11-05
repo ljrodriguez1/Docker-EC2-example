@@ -39,14 +39,14 @@ after_succes:
 deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
-    secret_access_key: $AWS_ACCESS_SECRET_KEY
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
     local_dir: dpl_cd_upload
     skip_cleanup: true
     bucket: travis-bucket-arquichat
     upload_dir: latest
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY_ID
-    secret_access_key: $AWS_ACCESS_SECRET_KEY
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
     bucket: travis-bucket-arquichat
     key: latest/latest.zip
     bundle_type: zip
