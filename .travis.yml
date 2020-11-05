@@ -42,8 +42,6 @@ deploy:
     secret_access_key: $AWS_ACCESS_SECRET_KEY
     local_dir: dpl_cd_upload
     skip_cleanup: true
-    on: &2
-      repo: ljrodriguez1/Docker-EC2-example
     bucket: travis-bucket-arquichat
     upload_dir: latest
   - provider: codedeploy
@@ -55,4 +53,5 @@ deploy:
     application: grupo4chat
     deployment_group: arquichat
     wait_until_deployed: true
-    on: *2
+    on: 
+      branch: master
