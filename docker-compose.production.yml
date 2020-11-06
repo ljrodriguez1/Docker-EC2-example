@@ -10,6 +10,7 @@ services:
     restart: unless-stopped
     networks:
       - app-network
+    env_file: .env
     environment: 
       DB: your_link:D
       SALT_SECRET: maybesalt:D
@@ -27,7 +28,7 @@ services:
       - ./nginx-conf:/etc/nginx/conf.d
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
-      - dhparam:/etc/ssl/certs
+      - ./dhparam:/etc/ssl/certs
     depends_on:
       - nodejs
     networks:
