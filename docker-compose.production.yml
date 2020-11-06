@@ -48,17 +48,7 @@ volumes:
   certbot-etc:
   certbot-var:
   web-root:
-    driver: local
-    driver_opts:
-      type: none
-      device: /home/ubuntu/node_project/views/
-      o: bind
   dhparam:
-    driver: local
-    driver_opts:
-      type: none
-      device: /home/ubuntu/node_project/dhparam/
-      o: bind
 
 networks:
   app-network:
