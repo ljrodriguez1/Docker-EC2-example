@@ -45,7 +45,7 @@ services:
       - web-root:/var/www/html
     depends_on:
       - webserver
-    command: certonly --webroot --webroot-path=/var/www/html --email diustilovsky@uc.cl --agree-tos --no-eff-email --force-renewal -d grupo4arquichat.tk  -d www.grupo4arquichat.tk
+    command: certonly --webroot --webroot-path=/var/www/html --email diustilovsky@uc.cl --agree-tos --no-eff-email --staging -d grupo4arquichat.tk  -d www.grupo4arquichat.tk
 
 volumes:
 z
@@ -57,3 +57,15 @@ z
 networks:
   app-network:
     driver: bridge
+© 2020 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Help
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
