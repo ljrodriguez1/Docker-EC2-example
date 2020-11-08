@@ -16,13 +16,11 @@ services:
     ports:
      - "5000:5000"
     environment:
-    - MONGO_USERNAME=$MONGO_USERNAME
-    - MONGO_PASSWORD=$MONGO_PASSWORD
-    - MONGO_HOSTNAME=db
-    - MONGO_PORT=$MONGO_PORT
-    - MONGO_DB=$MONGO_DB
-    depends_on: 
-      - db
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_HOSTNAME=db
+      - MONGO_PORT=$MONGO_PORT
+      - MONGO_DB=$MONGO_DB
     networks:
       - app-network
     
