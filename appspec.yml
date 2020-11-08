@@ -6,9 +6,10 @@ files:
     destination: /home/ubuntu/iic2173-proyecto-semestral-grupo4
 
 permissions:
-  - object: /
+  - object: /home/ubuntu
     pattern: "**"
     owner: root
+    group: root
 
 hooks: 
   ApplicationStop:
