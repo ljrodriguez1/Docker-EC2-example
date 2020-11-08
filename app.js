@@ -84,8 +84,7 @@ api.get('/groups', function (req, res) {
 })
 
 router.get('/', function (req, res) {
-  console.log('holaaaa')
-  res.send('hola como esta Updated ultima18');
+  res.send('Backend Grupo 4 ChatApp');
 });
 
 router.get('/world', function (req, res) {

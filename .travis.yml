@@ -53,5 +53,6 @@ deploy:
     application: grupo4chat
     deployment_group: arquichat
     wait_until_deployed: true
+    file_exists_behavior: overwrite
     on: 
       branch: master
