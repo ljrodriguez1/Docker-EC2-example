@@ -1,6 +1,31 @@
 version: '3'
 
 services:
+  authjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: authjs
+    command: node auth.js
+    volumes:
+      - .:/home/authjs/app
+      - /home/authjs/app/node_modules
+    container_name: authjs
+    restart: unless-stopped
+    env_file: .env
+    ports:
+     - "5000:5000"
+    environment:
+    - MONGO_USERNAME=$MONGO_USERNAME
+    - MONGO_PASSWORD=$MONGO_PASSWORD
+    - MONGO_HOSTNAME=db
+    - MONGO_PORT=$MONGO_PORT
+    - MONGO_DB=$MONGO_DB
+    depends_on: 
+      - db
+    networks:
+      - app-network
+    
   nodejs:
     build:
       context: .

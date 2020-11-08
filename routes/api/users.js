@@ -18,6 +18,26 @@ const User = require("../../models/User");
 router.get("/hola", (req, res) => {
   res.send("chao")
 })
+
+router.post("/deleteUser", (req, res) => {
+  const userEmail= req.body.userEmail;
+  User.findOneAndDelete({ email: userEmail }, function (err) {
+    if(err) console.log(err);
+    console.log("Successful deletion");
+  });
+})
+
+router.post("/updateUser", (req, res) => {
+  const userId = req.body.userId;
+  const userName = req.body.userName;
+  const userEmail = req.body.userEmail;
+
+  User.updateOne({_id: userId}, { name: userName, email: userEmail }, function (err) {
+    if(err) console.log(err);
+    console.log("Successful update");
+  });
+})
+
 router.post("/register", (req, res) => {
   // Form validation
 
@@ -35,7 +55,8 @@ router.post("/register", (req, res) => {
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
+        isAdmin: req.body.isAdmin
       });
 
       // Hash password before saving in database
@@ -76,6 +97,7 @@ router.post("/login", (req, res) => {
       return res.status(404).json({ emailnotfound: "Email not found" });
     }
 
+
     // Check password
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
@@ -83,7 +105,8 @@ router.post("/login", (req, res) => {
         // Create JWT Payload
         const payload = {
           id: user.id,
-          name: user.name
+          name: user.name,
+          isAdmin: user.isAdmin
         };
 
         // Sign token

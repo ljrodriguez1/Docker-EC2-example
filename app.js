@@ -14,8 +14,6 @@ const cors = require('cors');
 var redisAddress = process.env.REDIS_ADDRESS || 'redis://cache:6379';
 const redisClient = redis.createClient(redisAddress);
 
-const users = require("./routes/api/users");
-
 var mailer = require('./mailer');
 
 const WebSocketServer = require("ws").Server,
@@ -28,16 +26,8 @@ app.use(
     extended: false
   })
 );
-app.use(bodyParser.json());
 
 app.use(cors());
-
-
-app.use(passport.initialize());
-require("./config/passport")(passport);
-app.use("/api/users", users);
-
-
 
 
 const router = express.Router();
@@ -84,7 +74,8 @@ api.get('/groups', function (req, res) {
 })
 
 router.get('/', function (req, res) {
-  res.send('Backend Grupo 4 ChatApp');
+  console.log('holaaaa')
+  res.send('hola como esta Updated 29');
 });
 
 router.get('/world', function (req, res) {
@@ -108,11 +99,13 @@ wss.on('connection', function connection(ws) {
         if (err) {
           return;
         }
-        wss.clients.forEach(function each(client) {
-          if (client === ws && client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify({ type: 'datainput', groups, messages: [] }));
-          }
-        });
+        User.find({}).exec(function (err, users){
+          wss.clients.forEach(function each(client) {
+            if (client === ws && client.readyState === WebSocket.OPEN) {
+              client.send(JSON.stringify({ type: 'datainput', groups, users, messages: [] }));
+            }
+          });
+        }); 
       });
     } else if (message.initialGroup) {
       console.log(message)
@@ -135,11 +128,13 @@ wss.on('connection', function connection(ws) {
                 client.send(JSON.stringify({type: 'groupInput', messages}));
               } 
             });
-            const redisMessages = messages.map(function stringify(value, i){
-              return JSON.stringify(value)
-            });
-            redisClient.rpush(message.groupId, ...redisMessages);
-            redisClient.expire(message.groupId, 600);
+            if (messages.length != 0){
+              const redisMessages = messages.map(function stringify(value, i){
+                return JSON.stringify(value)
+              });
+              redisClient.rpush(message.groupId, ...redisMessages);
+              redisClient.expire(message.groupId, 600);
+            }
           });  
         }
       });
@@ -168,6 +163,8 @@ wss.on('connection', function connection(ws) {
           console.log(`Status: ${res.status}`);
           console.log('Body: ', res.data);
           console.log(message)
+          console.log(`ws: ${ws}`);
+          console.log('---')
           if (res.data.Sentiment === 'NEGATIVE') {
             message.message = 'Mensaje censurado por ser muy negativo'
           }
