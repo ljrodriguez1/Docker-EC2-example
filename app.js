@@ -85,7 +85,7 @@ api.get('/groups', function (req, res) {
 
 router.get('/', function (req, res) {
   console.log('holaaaa')
-  res.send('hola como esta Updated ultima15');
+  res.send('hola como esta Updated ultima16');
 });
 
 router.get('/world', function (req, res) {
