@@ -54,6 +54,7 @@ services:
       - ./dhparam:/etc/ssl/certs
     depends_on:
       - nodejs
+      - authjs
     networks:
       - app-network
 

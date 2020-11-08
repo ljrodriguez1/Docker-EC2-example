@@ -75,7 +75,7 @@ api.get('/groups', function (req, res) {
 
 router.get('/', function (req, res) {
   console.log('holaaaa')
-  res.send('hola como esta Updated 31');
+  res.send('hola como esta Updated 32');
 });
 
 router.get('/world', function (req, res) {
