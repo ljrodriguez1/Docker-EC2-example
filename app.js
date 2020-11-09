@@ -74,12 +74,10 @@ api.get('/groups', function (req, res) {
 })
 
 router.get('/', function (req, res) {
-  console.log('holaaaa')
-  res.send('hola como esta Updated 33');
+  res.send('hola como esta Updated 29');
 });
 
 router.get('/world', function (req, res) {
-  console.log('holaaaa')
   res.send('helloworld');
 });
 
@@ -94,6 +92,7 @@ wss.on('connection', function connection(ws) {
   console.log('conection incoming')
   ws.on('message', function incoming(data) {
     var message = JSON.parse(data);
+
     if (message.initial) {
       Group.find({}).exec(function (err, groups) {
         if (err) {
@@ -107,8 +106,11 @@ wss.on('connection', function connection(ws) {
           });
         }); 
       });
+    
+    
     } else if (message.initialGroup) {
-      console.log(message)
+      console.log("initialGroup");
+      console.log(message);
       redisClient.lrange(message.groupId, 0, -1,(err, data) => {
         console.log(data);
         console.log(err);
@@ -138,12 +140,15 @@ wss.on('connection', function connection(ws) {
           });  
         }
       });
+    
+    
     } else if (message.createGroup) {
-      console.log(message)
+      console.log("createGroup");
+      console.log(message);
       const group = new Group({ name: message.groupName, messages: [] })
       group.save(function (err, group) {
         if (err) {
-          console.log('fue erroneo')
+          console.log('No se pudo guardar el grupo')
           return
         }
         wss.clients.forEach(function each(client) {
@@ -152,6 +157,45 @@ wss.on('connection', function connection(ws) {
           }
         });
       });
+
+    //Censurar mensaje
+    } else if (message.censor) {
+      Message.findOneAndUpdate({name: message.name, message: message.message}, { messageUpdate: message.messageUpdate }, function (err) {
+        if(err) {
+            console.log(err);
+        }
+        else{
+            console.log("Successful message update");
+            Message.findOne({name: message.name, message: message.message}, function(err,obj){
+              msg = {
+                'messageUpdate': obj.messageUpdate,
+                '_id': obj._id,
+                'name': obj.name,
+                'message': obj.message,
+                'date': obj.date,
+                'group_id': obj.group_id,
+                'group_name': obj.group_name,
+                'type': 'update'
+              };
+
+              console.log(msg)
+              redisClient.rpushx(msg.group_id.toString(), JSON.stringify(msg), function(err, resp){
+                if (err) {
+                  console.log(err);
+                }
+              });
+
+              wss.clients.forEach(function each(client) {
+                if (client && client.readyState === WebSocket.OPEN) {   
+                  client.send(JSON.stringify(msg));
+                }
+              });
+            })  
+        }
+    });
+  
+    
+    
     } else {
 
       const data = {
@@ -163,8 +207,6 @@ wss.on('connection', function connection(ws) {
           console.log(`Status: ${res.status}`);
           console.log('Body: ', res.data);
           console.log(message)
-          console.log(`ws: ${ws}`);
-          console.log('---')
           if (res.data.Sentiment === 'NEGATIVE') {
             message.message = 'Mensaje censurado por ser muy negativo'
           }
@@ -175,6 +217,7 @@ wss.on('connection', function connection(ws) {
             } else {
             }
           });
+
           redisClient.rpushx(message.group_id, JSON.stringify(message), function(err, resp){
             if (err) {
               console.log(err);
@@ -215,4 +258,3 @@ wss.on('connection', function connection(ws) {
     }
   });
 });
-
