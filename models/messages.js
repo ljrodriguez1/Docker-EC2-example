@@ -6,7 +6,8 @@ const Message = new Schema ({
         message: { type: String, required: true },
         date: { type: Date, required: true },
         group_id: {type: Schema.Types.ObjectId, required: true},
-        group_name: {type: String, required: true }
+        group_name: {type: String, required: true },
+        messageUpdate: {type: String, default: null}
 
 });
 
