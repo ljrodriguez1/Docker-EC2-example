@@ -17,8 +17,8 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(passport.initialize());
 require("./config/passport")(passport);
-app.use("/api/users", users);
-app.use("/api/groups", groups);
+app.use("/auth/api/users", users);
+app.use("/auth/api/groups", groups);
 
 const port = process.env.AUTH_PORT || 5000;
 
