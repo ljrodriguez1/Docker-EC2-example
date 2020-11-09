@@ -2,6 +2,7 @@ const db = require('./db');
 const Message = require('./models/messages');
 const Group = require('./models/group');
 const User = require('./models/User');
+const Color = require('./models/colors');
 const WebSocket = require('ws');
 const { Schema } = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
@@ -13,6 +14,7 @@ const passport = require("passport");
 const cors = require('cors');
 var redisAddress = process.env.REDIS_ADDRESS || 'redis://cache:6379';
 const redisClient = redis.createClient(redisAddress);
+const colorRouter = require('./routes/api/colors');
 
 var mailer = require('./mailer');
 
@@ -84,6 +86,7 @@ router.get('/world', function (req, res) {
 app.use(express.static(path));
 app.use('/', router);
 app.use('/api', api);
+app.use('/api/colors', colorRouter);
 const server = app.listen(port, function () {
   console.log(`Example app listening on port ${port}!`)
 });
@@ -229,10 +232,19 @@ wss.on('connection', function connection(ws) {
               client.send(JSON.stringify(message));
             }
           });
-
+          if ( /.*#/.test(message.message)){
+            var regexMatch = message.message.match(/#[^ ]+/);
+            var color = regexMatch[0].replace("#", "");
+            const colorObject = Color.findOne({user_name: message.name}).exec((err, colorObject)=>{
+              if (colorObject){
+                colorObject.update({color: color});
+              }else {
+                const newColor = new Color({user_name: message.name, color});
+                newColor.save();
+              }
+            });
+          }
           if (/.*@/.test(message.message)) {
-            var regexMatch = message.message.match(/@[^ ]+/);
-            var username = regexMatch[0].replace("@", "");
 
             User.find({ name: username }).exec(function (err, users) {
               if (err) {
