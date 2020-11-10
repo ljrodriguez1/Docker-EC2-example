@@ -9,11 +9,33 @@ router.post('/', (req, res)=>{
     .then(color => {
         console.log(color)
         if (color.length != 0){
-            res.json(color[0].color);
+            res.json(color[0].actual);
         } else {
-            res.json({color: '#ababab'});
+            res.json('#ababab');
         }
     })
 });
+
+router.get('/pending', (req, res)=>{
+    Color.find({state: "pending"})
+    .then(color => {
+        res.json(color);
+
+    })
+});
+
+router.put('/validate', (req, res) => {
+    console.log(req.body)
+    console.log('aqui esta mi log')
+    Color.findById(req.body.colorId, (err, color) => {
+        if (color) {
+            color.state = req.body.colorState;
+            if (req.body.colorState === "true") {
+                color.actual = color.color
+            }
+            color.save()
+        }
+    })
+})
 
 module.exports = router;
