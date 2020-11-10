@@ -29,6 +29,8 @@ app.use(
   })
 );
 
+app.use(express.json())
+
 app.use(cors());
 
 
@@ -163,12 +165,15 @@ wss.on('connection', function connection(ws) {
 
     //Censurar mensaje
     } else if (message.censor) {
+      console.log(message.messageUpdate)
       Message.findOneAndUpdate({name: message.name, message: message.message}, { messageUpdate: message.messageUpdate }, function (err) {
         if(err) {
             console.log(err);
+            console.log('este es el error')
         }
         else{
             console.log("Successful message update");
+            console.log("ahora si que si")
             Message.findOne({name: message.name, message: message.message}, function(err,obj){
               msg = {
                 'messageUpdate': obj.messageUpdate,
@@ -235,11 +240,17 @@ wss.on('connection', function connection(ws) {
           if ( /.*#/.test(message.message)){
             var regexMatch = message.message.match(/#[^ ]+/);
             var color = regexMatch[0].replace("#", "");
-            const colorObject = Color.findOne({user_name: message.name}).exec((err, colorObject)=>{
+            console.log(color)
+            console.log("este es mi color")
+            const colorObject = Color.findOne({user_name: message.group_id}).exec((err, colorObject)=>{
+              console.log(colorObject)
               if (colorObject){
-                colorObject.update({color: color});
+                colorObject.color=color
+                colorObject.save()
+                console.log('update')
               }else {
-                const newColor = new Color({user_name: message.name, color});
+                const newColor = new Color({user_name: message.group_id, color});
+                console.log('new')
                 newColor.save();
               }
             });
