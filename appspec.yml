@@ -16,16 +16,8 @@ hooks:
     - location: Scripts/stop.sh
       timeout: 600
       runas: root
-  BeforeInstall:
-    - location: Scripts/clean.sh
-      timeout: 600
-      runas: root
   AfterInstall:
     - location: Scripts/install.sh
-      timeout: 600
-      runas: root
-  BeforeAplicationStart:
-    - location: logs.sh
       timeout: 600
       runas: root
   ApplicationStart:
