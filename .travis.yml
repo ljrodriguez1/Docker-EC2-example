@@ -19,6 +19,7 @@ install:
 
 script:
   - docker-compose up -d
+  - docker-compose run --rm nodejs npm test
   - sed -i -e 's/\r$/\n/' Scripts/start.sh
   - sed -i -e 's/\r$/\n/' Scripts/stop.sh
   - sed -i -e 's/\r$/\n/' Scripts/install.sh
