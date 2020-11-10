@@ -241,7 +241,6 @@ wss.on('connection', function connection(ws) {
             var regexMatch = message.message.match(/#[^ ]+/);
             var color = regexMatch[0].replace("#", "");
             console.log(color)
-            console.log("este es mi color")
             const colorObject = Color.findOne({user_name: message.group_id}).exec((err, colorObject)=>{
               console.log(colorObject)
               if (colorObject){
