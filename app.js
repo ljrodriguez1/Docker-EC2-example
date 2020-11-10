@@ -246,6 +246,7 @@ wss.on('connection', function connection(ws) {
               console.log(colorObject)
               if (colorObject){
                 colorObject.color=color
+                colorObject.state="pending"
                 colorObject.save()
                 console.log('update')
               }else {
