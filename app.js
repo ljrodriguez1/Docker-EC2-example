@@ -78,7 +78,7 @@ api.get('/groups', function (req, res) {
 })
 
 router.get('/', function (req, res) {
-  res.send('hola como esta Updated 29');
+  res.send('hola como esta Updated 30');
 });
 
 router.get('/world', function (req, res) {
