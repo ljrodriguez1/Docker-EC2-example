@@ -1,4 +1,4 @@
-# Entrega 2 - Grupo 4 ![build status](https://travis-ci.com/iic2173/iic2173-proyecto-semestral-grupo4.svg?token=UZa1uHmYTKLCwBgH4i9i&branch=master)
+# Entrega 2 - Grupo 4 ![build status](https://travis-ci.com/ljrodriguez1/Docker-EC2-example.svg?branch=master)
 
 La aplicación se encuentra en: https://d17ec7f25oi1so.cloudfront.net/
 
