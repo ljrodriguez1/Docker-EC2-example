@@ -3,10 +3,10 @@ os: linux
 
 files:
   - source: /
-    destination: /home/ubuntu/iic2173-proyecto-semestral-grupo4
+    destination: /home/ubuntu2/iic2173-proyecto-semestral-grupo4
 
 permissions:
-  - object: /home/ubuntu
+  - object: /home/ubuntu2
     pattern: "**"
     owner: root
     group: root
